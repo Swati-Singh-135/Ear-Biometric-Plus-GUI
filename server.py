@@ -17,7 +17,7 @@ def findPerson(fv):
         accuracy = compareEar(fv,item['fv'],a=0.1)
         if accuracy>85:
             return [accuracy, item]
-    return None
+    return [None,None]
 
 def findPersonByFace(encoding):
     print(encoding.shape)
@@ -25,7 +25,7 @@ def findPersonByFace(encoding):
         encoding2 = np.asarray(item['encoding'],dtype=np.float64)
         if face_recognition.compare_faces([encoding],encoding2)[0]:
             return [0.0, item]
-    return None
+    return [None, None]
 
 
 
@@ -45,7 +45,6 @@ def get_file(filename):
     return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'],filename)
 
 
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -62,7 +61,7 @@ def register():
             img = cv2.imread('./'+profile_url)
             face = extractFace(img,600)
             cv2.imwrite('./'+profile_url,face)
-            img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+            img = cv2.cvtColor(face,cv2.COLOR_BGR2RGB)
             encoding = face_recognition.face_encodings(img)[0]
             print(encoding)
         except:
@@ -83,8 +82,11 @@ def register():
             end = time.time()
             timetook = round((end-start)/4,3)
             info = getEarCannyAndGaussImg('./'+ear_url,600,9)
-            cv2.imwrite('uploads/canny.jpg',info['canny'])
-            cv2.imwrite('uploads/gauss.jpg',info['gaussian'])
+            earimg = cv2.imread('./'+ear_url)
+            os.remove('./'+ear_url)
+            cv2.imwrite('static/images/ear.jpg',earimg)
+            cv2.imwrite('static/images/canny.jpg',info['canny'])
+            cv2.imwrite('static/images/gauss.jpg',info['gaussian'])
             print(ear)
             if not error:
                 profile = {
@@ -103,7 +105,7 @@ def register():
                 prompt = "Registration Successfull"
                 print(prompt)
                 # return render_template('registration.html',form=form, profile_url=profile_url, ear_url=ear_url,isRegister=True)
-                return render_template('profile.html', profile=profile, images=['uploads/'+filename,'uploads/gauss.jpg','uploads/canny.jpg'], ear=ear, prompt=prompt, values = [None,timetook], databasetype="0")
+                return render_template('profile.html', profile=profile, images=['static/images/ear.jpg','static/images/gauss.jpg','static/images/canny.jpg'], ear=ear, prompt=prompt, values = [None,timetook], databasetype="0")
             else:
                 pass
         except:
@@ -131,18 +133,21 @@ def authenticate():
             timetook = round((end-start)/4,3)
             print("Time took:",end-start)
             info = getEarCannyAndGaussImg('uploads/'+filename,600,9)
-            cv2.imwrite('uploads/canny.jpg',info['canny'])
-            cv2.imwrite('uploads/gauss.jpg',info['gaussian'])
-            # print(ear)
+            
+            earimg = cv2.imread('uploads/'+filename)
+            cv2.imwrite('static/images/ear.jpg',earimg)
+            cv2.imwrite('static/images/canny.jpg',info['canny'])
+            cv2.imwrite('static/images/gauss.jpg',info['gaussian'])
+            os.remove('uploads/'+filename)
+            
             accuracy, profile = findPerson(ear['fv'])
-            print("accuracy: ",accuracy)
-            # print("profile", profile) 
+            
             prompt = ""
             if(profile):
                 prompt = "Match Found"
             else:
                 prompt = "Match Not Found"
-            return render_template('profile.html', profile=profile, images=['uploads/'+filename,'uploads/gauss.jpg','uploads/canny.jpg'], ear=ear, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)
+            return render_template('profile.html', profile=profile, images=['static/images/ear.jpg','static/images/gauss.jpg','static/images/canny.jpg'], ear=ear, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)
         except:
             print("Anonymous Ear Image")
             form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
@@ -170,8 +175,12 @@ def multimode():
                 timetook = round((end-start)/4,3)
                 print("Time took:",end-start)
                 info = getEarCannyAndGaussImg('uploads/'+filename,600,9)
-                cv2.imwrite('uploads/canny.jpg',info['canny'])
-                cv2.imwrite('uploads/gauss.jpg',info['gaussian'])
+                earimg = cv2.imread('uploads/'+filename)
+                cv2.imwrite('static/images/ear.jpg',earimg)
+                cv2.imwrite('static/images/canny.jpg',info['canny'])
+                cv2.imwrite('static/images/gauss.jpg',info['gaussian'])
+                os.remove('uploads/'+filename)
+                # print("-----------------------reached ------------------------")
                 # print(ear)
                 accuracy, profile = findPerson(ear['fv'])
                 print("accuracy: ",accuracy)
@@ -181,7 +190,7 @@ def multimode():
                     prompt = "Match Found"
                 else:
                     prompt = "Match Not Found"
-                return render_template('profile.html', profile=profile, images=['uploads/'+filename,'uploads/gauss.jpg','uploads/canny.jpg'], ear=ear, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)
+                return render_template('profile.html', profile=profile, images=['static/images/ear.jpg','static/images/gauss.jpg','static/images/canny.jpg'], ear=ear, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)
             except:
                 print("Anonymous Ear Image")
                 form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
@@ -190,6 +199,9 @@ def multimode():
             print("Face Photo recieved")
             filename = photos.save(form.photo.data)
             face = cv2.imread('uploads/'+filename)
+            face = extractFace(face,600)
+            # cv2.imwrite('uploads/'+filename,face)
+            os.remove('uploads/'+filename)
             face = cv2.cvtColor(face,cv2.COLOR_BGR2RGB)
             try:
                 encoding = face_recognition.face_encodings(face)[0]
