@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+
+{%block title%}User Profile{%endblock%}
+
+
+
+{%block head%}
+{{ super() }}
+{%endblock%}
+
+
+{%block content%}
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        {% if profile %}
+        <script>
+            swal("Match Found", "", "success");
+        </script>
+        <div class="card text-black bg-light" style="width:100%;">
+            <div class="card-header"><h3><b>User Profile</b></h3></div>
+            <div class="card-body">
+              <p class="card-text">
+                <div class="">
+                    <img
+                      src = {{ profile['profileImg'] }}
+                      class="img-thumbnail"
+                      id="pimageo"
+                      style="height: 200px; width: 200px; margin:5px;"
+                    />
+                </div>
+                <b>ID:</b>{{ profile['id']}} <br>
+                <b>Full Name: </b>{{ profile['name']}} <br>
+                <b>Father Name: </b>{{ profile['fatherName']}} <br>
+                <b>Date of Birth: </b>{{ profile['dob']}} <br>
+                <b>Blood Group:</b> {{ profile['bloodGroup']}} <br>
+                <br>
+                <!-- <b>Feature Vector 1: (angle between reference_Line_1 joining reference point and normal intersection point on the outer edge)</b>
+                <br>
+                {{profile['fv'][0]}}
+                <br>
+                <br>
+                <b>Feature Vector 2: (angle between reference_line_2 joining reference point and normal intersection point on the outer edge)</b>
+                <br>
+                {{profile['fv'][1]}}
+                <br>
+                <br>
+                <b>Ear Category:</b>{{profile['shape']+1}} -->
+              </p>
+            </div>
+        </div>
+        {% endif %}
+        {% if not profile%}
+        <script>
+            swal("Match not found", "Please contact admin to register", "error");
+        </script>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function updateEar(){
+        var selectedFile = document.getElementById("earimage").files[0];
+        var img = document.getElementById('earimageo')
+
+        var reader = new FileReader();
+        reader.onload = function(){
+            img.src = this.result
+        }
+        reader.readAsDataURL(selectedFile);
+    }
+    
+    document.getElementById("earimage").addEventListener("change", updateEar);
+    
+</script>
+{%endblock%}
+
+
+
+{%block footer%}
+{{ super() }}
+{%endblock%}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 
-{%block title%}Register{%endblock%}
+{%block title%}Authenticate{%endblock%}
 
 
 
@@ -50,27 +50,6 @@
             <br>
 
         </div>
-        {% if ear %}
-        <div class="card text-black bg-light" style="width:100%;">
-            <div class="card-header"><h6><b>Output</b></h6></div>
-            <div class="card-body">
-              <p class="card-text">
-                <br>
-                <b>Feature Vector 1: (angle between reference_Line_1 joining reference point and normal intersection point on the outer edge)</b>
-                <br>
-                {{ear['fv'][0]}}
-                <br>
-                <br>
-                <b>Feature Vector 2: (angle between reference_line_2 joining reference point and normal intersection point on the outer edge)</b>
-                <br>
-                {{ear['fv'][1]}}
-                <br>
-                <br>
-                <b>Ear Category:</b>{{ear['shape']+1}}
-              </p>
-            </div>
-        </div>
-        {% endif %}
     </div>
 </div>
 <script>

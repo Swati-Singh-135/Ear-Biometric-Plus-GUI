@@ -11,7 +11,7 @@ def findPerson(fv):
     for item in collection.find():
         if compareEar(fv,item['fv'],a=0.1)>85:
             return item
-    return -1
+    return None
 
 
 
@@ -56,8 +56,9 @@ def register():
                 'profileImg': profile_url,
                 'fatherName':fathername,
                 'dob': dob.strftime("%d/%m/%Y"),
-                'bloodgroup':bloodgroup,
-                'fv': ear['fv']
+                'bloodGroup':bloodgroup,
+                'fv': ear['fv'],
+                'shape':ear['shape']
             })
             return render_template('registration.html',form=form, profile_url=profile_url, ear_url=ear_url,isRegister=True)
         except:
@@ -72,19 +73,21 @@ def register():
 @app.route('/authenticate', methods=['GET','POST'])
 def authenticate():
     form = AuthForm()
-    ear=None
     if form.validate_on_submit():
         filename = photos.save(form.earphoto.data)
         # print('upload/'+filename)
         
         try:
-            ear = getFvAndShape('uploads/'+filename)    
-            return render_template('auth.html',form=form, ear=ear)
+            ear = getFvAndShape('uploads/'+filename)
+            print('1')
+            profile = findPerson(ear['fv'])
+            print('2')    
+            return render_template('profile.html', profile=profile)
         except:
             print("Anonymous Ear Image")
             form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
 
-    return render_template('auth.html',form=form, ear=ear)
+    return render_template('auth.html',form=form)
 
 if __name__ == '__main__':
     # collection.insert_one({'name':'prasant','marks':100})
