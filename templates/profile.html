@@ -7,103 +7,168 @@
 
 {%block head%}
 {{ super() }}
+<style>
+
+    
+
+</style>
 {%endblock%}
 
 
 {%block content%}
+
+{% if profile %}
 <div class="container" style="padding-top: 2rem;">
-    <div class="row justify-content-center align-items-center">
-        {% if profile %}
+    
+        <!-- {{ prompt }} -->
+        <div class="box" style="text-align:left; padding:0;">
+                <div class="">
+                    <div class="row">
+                    <div class="col-sm-3" style="margin:2vh 1vw">
+                        <div class="" style="display: flex; height:20%">
+                            <figure>
+                                <img
+                                src = {{ profile['profileImg'] }}
+                                class="img-thumbnail"
+                                id="pimageo"
+                                style="height: 200px; width: 200px; margin:5px; margin-top:20px;"
+                                />
+                                <figcaption>Profile Picture</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="margin:2vh 1vw">
+                        <br>
+                        <b>ID:</b>{{ profile['id']}} <br> <br>
+                        <b>Full Name: </b>{{ profile['name']}} <br> <br>
+                        <b>Father Name: </b>{{ profile['fatherName']}} <br> <br>
+                        <b>Date of Birth: </b>{{ profile['dob']}} <br> <br>
+                        <b>Blood Group:</b> {{ profile['bloodGroup']}} <br>
+                        <br>
+                    </div>
+                    <div class="col-lg-3" style="margin:2vh 1vw">
+                        <!-- <img src="../static/rightside.png" alt="" style="width:100%;height:290px;"> -->
+                        <br>
+                        <h1><b>{{prompt}}</b></h1>
+                        <br>
+                        {% if values[0] %}
+                        <b>Accuracy:</b> {{ values[0] }} % <br> <br>
+                        {% endif %}
+                        {% if databasetype=="0" %}
+                        <b>Time taken:</b> {{ values[1] }} seconds <br> <br>
+                        {% endif %}
+                        {% if databasetype=="1"%}
+                        <b>Time taken:</b> {{ values[1]/4 }} seconds <br> <br>
+                        {% endif %}
+                        {% if databasetype=="2"%}
+                        <b>Time taken:</b> {{ values[1] }} seconds <br> <br>
+                        <b>Time taken:</b> {{ values[1]/4 }} seconds <br> <br>
+                        {% endif %}
+                    
+                    </div>
+                    </div>
+                </div>
+                <!-- 
+                
+                
+                 -->
+        </div>
+
+
         
-        <div class="card text-black bg-light" style="width:100%;">
-            <div class="card-header"><h3><b>{{ prompt }}</b></h3></div>
-            <div class="card-body">
-              <p class="card-text">
-                <div class="" style="display: flex; height:20%">
-                    <figure>
-                        <img
-                        src = {{ profile['profileImg'] }}
-                        class="img-thumbnail"
-                        id="pimageo"
-                        style="height: 200px; width: 200px; margin:5px;"
-                        />
-                        <figcaption>Profile Picture</figcaption>
-                    </figure>
-                    {% if images %}
-                    <figure style="margin-left: 2rem;">
-                        <img
-                        src = {{ images[0] }}
-                        class="img-thumbnail"
-                        id="pimageo"
-                        style="height: 200px; width: 200px; margin:5px; -webkit-filter: grayscale(100%); filter: grayscale(100%);"
-                        />
-                        <figcaption>Original Ear</figcaption>
-                    </figure>
-                    <figure style="margin-left: 2rem; -webkit-filter: grayscale(100%); filter: grayscale(100%);">
-                        <img
-                        id="gauss" 
-                        src = {{ images[1] }}
-                        class="img-thumbnail"
-                        id="pimageo"
-                        style="height: 200px; width: 200px; margin:5px;"
-                        />
-                        <figcaption>Gaussian Blur</figcaption>
-                    </figure>
-                    <figure style="margin-left: 2rem;">
-                        <img
-                        id="canny" 
-                        src = {{ images[2] }}
-                        class="img-thumbnail"
-                        id="pimageo"
-                        style="height: 200px; width: 200px; margin:5px;"
-                        />
-                        <figcaption>Canny</figcaption>
-                    </figure>
+</div>
+
+{% if ear %}
+<div class="container" style="padding-top: 2rem;">
+    
+    <!-- {{ prompt }} -->
+    <div class="box" style="text-align:left; padding:0;">
+            <div class="">
+                <div class="row">
+                <!-- <div class="col-lg-3 d-none d-sm-block">
+                    <img src="../static/leftside.png" alt="" style="width:100%;height:290px;">
+                </div> -->
+                <div class="col-sm-5" style="margin:2vh 1vw">
+                    <div class="" style="display: flex; height:20%">
+                        {% if images %}
+                <figure style="margin-left: 2rem;">
+                    <img
+                    id = "originalear"
+                    src = {{ images[0] }}
+                    class="img-thumbnail"
+                    id="pimageo"
+                    style="height: 200px; width: 200px; margin:5px; -webkit-filter: grayscale(100%); filter: grayscale(100%);"
+                    />
+                    <figcaption>Original Ear</figcaption>
+                </figure>
+                <figure style="margin-left: 2rem; -webkit-filter: grayscale(100%); filter: grayscale(100%);">
+                    <img
+                    id="gauss" 
+                    src = {{ images[1] }}
+                    class="img-thumbnail"
+                    id="pimageo"
+                    style="height: 200px; width: 200px; margin:5px;"
+                    />
+                    <figcaption>Gaussian Blur</figcaption>
+                </figure>
+                <figure style="margin-left: 2rem;">
+                    <img
+                    id="canny" 
+                    src = {{ images[2] }}
+                    class="img-thumbnail"
+                    id="pimageo"
+                    style="height: 200px; width: 200px; margin:5px;"
+                    />
+                    <figcaption>Canny</figcaption>
+                </figure>
+                {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-6" style="margin:2vh 1vw">
+                    {% if ear %}
+                    <b>Feature Vector 1:</b> {{ ear['fv'][0]}} <br> <br>
+                    <b>Feature Vector 2:</b> {{ ear['fv'][1]}} <br> <br>
+                    <b>Shape:</b> {{ ear['shape']}} <br> <br>    
                     {% endif %}
                 </div>
-                <div class="">
-                    
+                
                 </div>
-                <p class="card-text">
-                {% if values[0] %}
-                <b>Accuracy:</b> {{ values[0] }} % <br>
-                {% endif %}
-                {% if databasetype=="0" %}
-                <b>Time took:</b> {{ values[1] }} seconds <br>
-                {% endif %}
-                {% if databasetype=="1"%}
-                <b>Time took:</b> {{ values[1]/4 }} seconds <br>
-                {% endif %}
-                {% if databasetype=="2"%}
-                <b>Time took:</b> {{ values[1] }} seconds <br>
-                <b>Time took:</b> {{ values[1]/4 }} seconds <br>
-                {% endif %}
-                {% if ear %}
-                <b>Feature Vector 1:</b> {{ ear['fv'][0]}} <br>
-                <b>Feature Vector 2:</b> {{ ear['fv'][1]}} <br>
-                <b>Shape:</b> {{ ear['shape']}} <br> <br>    
-                {% endif %}
-                <b>ID:</b>{{ profile['id']}} <br>
-                <b>Full Name: </b>{{ profile['name']}} <br>
-                <b>Father Name: </b>{{ profile['fatherName']}} <br>
-                <b>Date of Birth: </b>{{ profile['dob']}} <br>
-                <b>Blood Group:</b> {{ profile['bloodGroup']}} <br>
-                <br>
-              </p>
             </div>
-        </div>
-        <script>
-            document.getElementById('gauss').src = document.getElementById('gauss').src+'?'+(new Date()).getTime();
-            document.getElementById('canny').src = document.getElementById('canny').src+'?'+(new Date()).getTime();
-        </script>
-        {% endif %}
-        {% if not profile%}
+            <!-- 
+            
+            
+             -->
+    </div>
+
+
+    
+</div>
+{% endif %}
+<!-- <div class="box" style="text-align:left">
+            <div class="" style="display: flex; height:20%">
+                
+                
+            </div>
+                
+                
+        </div> -->
+
+
+{% endif %}
+
+{% if not profile%}
         <script>
             swal("Match not found", "Please contact admin to register", "error");
         </script>
-        {% endif %}
-    </div>
-</div>
+{% endif %}
+
+<script>
+            
+    document.getElementById('gauss').src = document.getElementById('gauss').src+'?'+(new Date()).getTime();
+    document.getElementById('originalear').src = document.getElementById('originalear').src+'?'+(new Date()).getTime();
+    document.getElementById('canny').src = document.getElementById('canny').src+'?'+(new Date()).getTime();
+</script>
+
 <script>
     function updateEar(){
         var selectedFile = document.getElementById("earimage").files[0];

@@ -13,13 +13,16 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="../static/style.css" />
     <script src="../static/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js"></script>
+    <link rel="stylesheet" href="../static/style.css" />
+    <script src="../static/script.js"></script>
     <title>{% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
   <body style="padding: 0px; padding-top: 0px">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background:linear-gradient(270deg, rgba(255,183,72,1) 0%, rgba(170,42,170,1) 67%, rgba(61,84,224,1) 100%);box-shadow: 0 8px 10px rgba(0,0,72,0.2);">
       <button
         class="navbar-toggler"
         type="button"
@@ -34,10 +37,10 @@
 
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
           </li>
           <li class="nav-item">

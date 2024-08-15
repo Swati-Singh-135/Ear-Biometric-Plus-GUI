@@ -6,3 +6,21 @@
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(100%);
 }
+
+.swal2-html-container{
+    text-align: left;
+}
+
+.box {
+    border: 3px solid transparent; /* Set the border width and make it transparent */
+    border-image: linear-gradient(270deg, rgba(255,183,72,1) 0%, rgba(170,42,170,1) 67%, rgba(61,84,224,1) 100%); /* Set the gradient border image */
+    border-image-slice: 1; /* Make the border slice to fill the entire border */
+    padding: 15px 50px 15px 50px; /* Add some padding to the box */
+    text-align: center; /* Center the text inside the box */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+.btn{
+    margin: 5px;
+}
+

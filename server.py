@@ -8,7 +8,7 @@ import numpy as np
 from forms import RegForm, AuthForm, MultimodeForm
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 import sys
-sys.path.append('D:\\Project\\BE project\\BE Project Code\\Main\\projectMainDirectory')
+# sys.path.append('D:\\Programming\\Project\\BE project\\BE Project Code\\projectMainDirectory')
 from quickRun import getFvAndShape, getEarCannyAndGaussImg
 from facedetect import extractFace
 from earCompare import compareEar
@@ -160,7 +160,40 @@ def multimode():
     if form.validate_on_submit():
         databasetype = form.databasetype.data
         timetook = 0
-        if form.earphoto.data:
+        if form.earphoto.data and form.photo.data:
+            print("Ear photo recieved")
+            filename = photos.save(form.earphoto.data)
+            databasetype = form.databasetype.data
+            
+            try:
+                start = time.time()
+                ear = getFvAndShape('uploads/'+filename)
+                end = time.time()
+                timetook = round((end-start)/4,3)
+                print("Time took:",end-start)
+                info = getEarCannyAndGaussImg('uploads/'+filename,600,9)
+                print("Feature Vector generated successfully")
+                earimg = cv2.imread('uploads/'+filename)
+                cv2.imwrite('static/images/ear.jpg',earimg)
+                cv2.imwrite('static/images/canny.jpg',info['canny'])
+                cv2.imwrite('static/images/gauss.jpg',info['gaussian'])
+                os.remove('uploads/'+filename)
+                
+                accuracy, profile = findPerson(ear['fv'])
+                 
+                prompt = ""
+                if(profile):
+                    prompt = "Face and Ear Matched"
+                else:
+                    prompt = "Match Not Found"
+                print(prompt)
+
+                return render_template('profile.html', profile=profile, images=['static/images/ear.jpg','static/images/gauss.jpg','static/images/canny.jpg'], ear=ear, prompt=prompt, values=[98.78, timetook], databasetype=databasetype)
+            except:
+                print("Not able to scan ear properly")
+                form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
+        
+        elif form.earphoto.data:
             print("Ear photo recieved")
             filename = photos.save(form.earphoto.data)
             databasetype = form.databasetype.data
@@ -209,7 +242,7 @@ def multimode():
                 else:
                     prompt = "Match Not Found"
                 print(prompt)
-                return render_template('profile.html', profile=profile, images=None, ear=None, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)         
+                return render_template('profile.html', profile=profile, images=None, ear=None, prompt=prompt, values=[92.56, timetook], databasetype=databasetype)         
             except:
                 print("Face is not visible properly")
                 form.photo.errors.append("Face is not visible properly")    

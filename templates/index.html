@@ -7,26 +7,125 @@
 
 {%block head%}
 {{ super() }}
+
+<style>
+
+    
+
+    #main-card{
+        min-height: 90vh;
+        width: 90vw;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        text-align: left;
+        padding-bottom: 100px;
+    }
+    .box{
+        border: 6px solid transparent; /* Set the border width and make it transparent */
+        border-image: linear-gradient(270deg, rgba(255,183,72,1) 0%, rgba(170,42,170,1) 67%, rgba(61,84,224,1) 100%); /* Set the gradient border image */
+        border-image-slice: 1; /* Make the border slice to fill the entire border */
+        padding: 15px 50px 15px 50px; /* Add some padding to the box */
+        text-align: center; /* Center the text inside the box */
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .register-now{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 20px;
+    }
+</style>
+
 {%endblock%}
 
 
 {%block content%}
 
-<div class="container" style="text-align: center;">
-    <br>
-    <h1 class="md-5">Ear Based Biometric system</h1>
-    (Army Institute of Technology)
-    <br><br><br><br><br><br>
-    <h4><b>Try Now</b></h4>
-    <a href="/register" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Register</a>
-    <a href="/authenticate" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Authenticate</a>
-    <a href="/multimode" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Multimode</a>
+<div id="main-card" class="box">
+
+    <div>
+        <br>
+        <div id="typed-heading">
+            <div style="display: flex;">
+                <div id="typed-container"></div>
+            </div>
+            
+            
+            
+            <script>
+              var typed = new Typed('#typed-container', {
+                strings: ['<h1 class="md-5">Ear Based Biometric system</h1>', '<h1 class="md-5">Geometric Feature Extraction of Ear</h1>','<h1 class="md-5">MultiMode Authentication System</h1>'],
+              typeSpeed: 50,
+              showCursor: true,
+              cursorChar: '_',
+              loop:true
+              });
+            </script>
+            
+            <style>
+            .typed-cursor {
+                font-size: 38px;
+            }
+            
+            </style>
+            
+        </div>
+        
+        <br>
+        <b>About</b> <br>
+        Our website is a unique platform that enables users to identify individuals by analyzing their ear images. By utilizing cutting-edge technology and advanced algorithms, we are able to accurately identify individuals based on the distinct features of their ears. This can be incredibly useful in various scenarios, such as security and surveillance, criminal investigations, and even medical purposes.
+        <br>
+        Our platform provides a simple and user-friendly interface that allows users to upload an ear image and receive a quick identification result. The system is highly secure and reliable, ensuring the privacy and confidentiality of all users.
+        
+        <!-- <div style="display: flex;">
+            <figure>
+                <img
+                src = "../static/girlear.jpg"
+                class="img-thumbnail"
+                id="pimageo"
+                style="height: 200px; width: 150px; margin:5px; margin-top:20px;"
+                />
+            </figure>
+            <figure>
+                <img
+                src = "../static/fv.jpg"
+                class="img-thumbnail"
+                id="pimageo"
+                style="height: 200px; width: 150px; margin:5px; margin-top:20px;"
+                />
+            </figure>
+            <figure>
+                <img
+                src = "../static/shape.jpg"
+                class="img-thumbnail"
+                id="pimageo"
+                style="height: 200px; width: 150px; margin:5px; margin-top:20px;"
+                />
+            </figure>
+        </div> -->
+        
+        <a href="/multimode" class="btn btn-outline-primary btn-lg register-now" role="button" aria-pressed="true" style="right:17.5rem;">Multimode</a>
+        <a href="/authenticate" class="btn btn-outline-success btn-lg register-now" role="button" aria-pressed="true" style="right: 7.5rem;">Authenticate</a>
+        <a href="/register" class="btn btn-primary btn-lg active register-now" role="button" aria-pressed="true">Register</a>
+        
+    </div>
 
 </div>
+
+
+
+
+
+
+
+
 <script>
     document.getElementsByClassName("navbar")[0].style.display = "none";
-
+    
 </script>
+
 {%endblock%}
 
 
