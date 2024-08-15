@@ -52,3 +52,15 @@ class RegForm(FlaskForm):
         ]
     )
     submit = SubmitField('Submit')
+
+
+class AuthForm(FlaskForm):
+    earphoto = FileField(
+        label="Ear Image",
+        validators=[
+            FileAllowed(photos,'Only images are allowed'),
+            FileRequired('Ear Image Field should not be empty')
+        ]
+    )
+
+    submit = SubmitField('Submit')

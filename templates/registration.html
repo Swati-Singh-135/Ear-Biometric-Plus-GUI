@@ -4,6 +4,11 @@
 {{super()}} 
 {%endblock%} 
 {%block content%}
+{% if isRegister %}
+<script>
+  swal("Registration Successfull", "Thank you", "success");
+</script>
+{% endif %}
 <div>
   <!-- background-image: url(../static/bg.webp); -->
 <div class="justify-content-center align-items-center text-center">

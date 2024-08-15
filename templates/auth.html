@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+
+{%block title%}Register{%endblock%}
+
+
+
+{%block head%}
+{{ super() }}
+{%endblock%}
+
+
+{%block content%}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="text-center col-10 col-md-8 col-lg-6">
+
+            <h1 class="md-5">Find Feature Vectors</h1>
+            Ear Biometric System (Army Institute of Technology)
+            <form action="" method="post" enctype="multipart/form-data">
+                
+                {{form.hidden_tag()}}
+                {% for ele in form %}
+                {% for error in ele.errors %}
+                    <span style="color: red;">{{error}}</span>
+                    <br>
+                {% endfor %}
+                {% endfor %}
+                
+                <div class="mt-5">
+                    <img
+                        src="../static/ear.jpg"
+                        class="img-thumbnail"
+                        style="height: 200px; width: 200px; margin:5px;"
+                        id="earimageo"
+                    />
+                </div>
+                Ear Picture
+
+                
+                <br>
+                <div class="row">
+                    Ear Image<i style="color: red; width:auto; padding:0%;">*</i>: {{form.earphoto(class="form-control", id="earimage")}}
+                </div>
+                <br>
+
+                <div class="row">{{form.submit(class="btn btn-success")}}</div>
+            </form>
+            <br>
+
+        </div>
+        {% if ear %}
+        <div class="card text-black bg-light" style="width:100%;">
+            <div class="card-header"><h6><b>Output</b></h6></div>
+            <div class="card-body">
+              <p class="card-text">
+                <br>
+                <b>Feature Vector 1: (angle between reference_Line_1 joining reference point and normal intersection point on the outer edge)</b>
+                <br>
+                {{ear['fv'][0]}}
+                <br>
+                <br>
+                <b>Feature Vector 2: (angle between reference_line_2 joining reference point and normal intersection point on the outer edge)</b>
+                <br>
+                {{ear['fv'][1]}}
+                <br>
+                <br>
+                <b>Ear Category:</b>{{ear['shape']+1}}
+              </p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function updateEar(){
+        var selectedFile = document.getElementById("earimage").files[0];
+        var img = document.getElementById('earimageo')
+
+        var reader = new FileReader();
+        reader.onload = function(){
+            img.src = this.result
+        }
+        reader.readAsDataURL(selectedFile);
+    }
+    
+    document.getElementById("earimage").addEventListener("change", updateEar);
+    
+</script>
+{%endblock%}
+
+
+
+{%block footer%}
+{{ super() }}
+{%endblock%}
