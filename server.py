@@ -31,7 +31,7 @@ def upload_image():
         regno = form.regno.data
         dob = form.dob.data
         bloodgroup = form.bloodgroup.data
-        print(fathername,name,regno,dob,bloodgroup)
+        print(name,regno,fathername,dob,bloodgroup)
     else:
         profile_url = None
         ear_url = None
@@ -40,4 +40,3 @@ def upload_image():
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)
-    

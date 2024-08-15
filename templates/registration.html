@@ -1,108 +1,129 @@
-{% extends "base.html" %}
-
-
-{%block title%}Register{%endblock%}
-
-
-
-{%block head%}
-{{ super() }}
-{%endblock%}
-
-
+{% extends "base.html" %} 
+{%block title%}Register{%endblock%} 
+{%block head%} 
+{{super()}} 
+{%endblock%} 
 {%block content%}
-
-<div class="container">
-    <div class="row justify-content-center align-items-center">
-        <div class="text-center col-10 col-md-8 col-lg-6">
-
-            <h1 class="md-5">Register the Ear</h1>
-            Ear Based Authentication system <br>
-            (Army Institute of Technology)
-            <form action="" method="post" enctype="multipart/form-data">
-                <!-- {% if not profile_url %}
-                    <div class="mt-5">
-                        <img src="../static/profile.jpg" class="img-thumbnail" style="height: 200px; width:200px;">
-                    </div>
-                {% endif %}
-                {% if profile_url %}
-                    <div class="mt-5">
-                        <img src="{{ file_url }}" class="img-thumbnail" style="height: 200px; width:200px;">
-                    </div>
-                {% endif %}
-                Profile Picture
-
-                {% if not ear_url %}
-                    <div class="mt-5">
-                        <img src="../static/ear.jpg" class="img-thumbnail" style="height: 200px; width:200px;">
-                    </div>
-                {% endif %}
-                {% if ear_url %}
-                    <div class="mt-5">
-                        <img src="{{ file_url }}" class="img-thumbnail" style="height: 200px; width:200px;">
-                    </div>
-                {% endif %}
-                Ear Picture
-                <br>
-                <br> -->
-
-
-                {{form.hidden_tag()}}
-                {% for ele in form %}
-                {% for error in ele.errors %}
-                    <span style="color: red;">{{error}}</span>
-                    <br>
-                {% endfor %}
-                {% endfor %}
-
-                <!-- {% for error in form.earphoto.errors %}
-                    <span style="color: red;">{{error}}</span>
-                {% endfor %} -->
-                
-                
-                <br>
-                <div class="row">
-                    Profile Image <i style="color: red; width:auto; padding:0%;">*</i> : {{form.photo(class="form-control")}}
-                </div>
-                <br>
-                <div class="row">
-                    Ear Image<i style="color: red; width:auto; padding:0%;">*</i>: {{form.earphoto(class="form-control")}}
-                </div>
-                <br>
-                <div class="row">
-                    Name<i style="color: red; width:auto; padding:0%;">*</i>: {{form.name(class="form-control")}}
-                </div>
-                <br>
-                <div class="row">
-                    Father's name<i style="color: red; width:auto; padding:0%;">*</i>: {{form.fathername(class="form-control")}}
-                </div>
-                <br>
-                <div class="row">
-                    Registration Number<i style="color: red; width:auto; padding:0%;">*</i>: {{form.regno(class="form-control")}}
-                </div>
-                <br>
-                <div class="row">
-                    Date of Birth<i style="color: red; width:auto; padding:0%;">*</i>: {{form.dob(class="form-control")}}
-                </div>
-                <br>
-                <div class="row">
-                    Blood Group<i style="color: red; width:auto; padding:0%;">*</i>: {{form.bloodgroup(class="form-control")}}
-                </div>
-                <br>
-                
-                <div class="row">{{form.submit(class="btn btn-success")}}</div>
-            </form>
-            
-            
-        </div>
-        
-    </div>
+<div class="justify-content-center align-items-center text-center">
+  <h1 class="md-5">Register the Ear</h1>
+  Ear Based Authentication system <br />
+  (Army Institute of Technology)
 </div>
+<form action="" method="post" enctype="multipart/form-data">
+<div class="row" style="padding:10px">
+    <div class="col-md-3"></div>
 
-{%endblock%}
+    <div class="col-md-3">
+    <div class="container">
+        <br>
+    <div class="row">
+        Ear Image<i style="color: red; width: auto; padding: 0%">*</i>:
+        <div class="">
+            <img
+              src="../static/ear.jpg"
+              class="img-thumbnail"
+              style="height: 200px; width: 200px; margin:5px;"
+              id="earimageo"
+            />
+          </div>
+        {{form.earphoto(class="form-control",id="earimage")}}
+      </div>
+      <br />
+    <div class="row">
+        Profile Image
+        <i style="color: red; width: auto; padding: 0%">*</i> :
+        <div class="">
+            <img
+              src="../static/profile.jpg"
+              class="img-thumbnail"
+              id="pimageo"
+              style="height: 200px; width: 200px; margin:5px;"
+            />
+        </div>
+        {{form.photo(class="form-control",id="pimage")}}
+      </div>
+    <br />
+    </div>
+    
+  </div>
+  
+  <div class="col-md-6">
+    <div class="container">
+      <div class="">
+        <div class="text-center">
+          
+            {{form.hidden_tag()}} {% for ele in form %} {% for error in
+            ele.errors %}
+            <span style="color: red">{{error}}</span>
+            <br />
+            {% endfor %} {% endfor %}
 
+            <br />
+            
+            
+            <div class="row">
+              ID Number<i style="color: red; width: auto; padding: 0%">*</i>:
+              {{form.regno(class="form-control")}}
+            </div>
+            <br />
+            <div class="row">
+              Name<i style="color: red; width: auto; padding: 0%">*</i>:
+              {{form.name(class="form-control")}}
+            </div>
+            <br />
+            <div class="row">
+              Father's name<i style="color: red; width: auto; padding: 0%">*</i
+              >: {{form.fathername(class="form-control")}}
+            </div>
+            <br />
+            <div class="row">
+              Date of Birth<i style="color: red; width: auto; padding: 0%">*</i
+              >: {{form.dob(class="form-control")}}
+            </div>
+            <br />
+            <div class="row">
+              Blood Group<i style="color: red; width: auto; padding: 0%">*</i>:
+              {{form.bloodgroup(class="form-control")}}
+            </div>
+            <br />
 
+            <div class="row">{{form.submit(class="btn btn-success")}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-{%block footer%}
-{{ super() }}
+  
+</div>
+</form>
+
+<script>
+    function updateEar(){
+        var selectedFile = document.getElementById("earimage").files[0];
+        var img = document.getElementById('earimageo')
+
+        var reader = new FileReader();
+        reader.onload = function(){
+            img.src = this.result
+        }
+        reader.readAsDataURL(selectedFile);
+    }
+    
+    function updateProfile(){
+        var selectedFile = document.getElementById("pimage").files[0];
+        var img = document.getElementById('pimageo')
+
+        var reader = new FileReader();
+        reader.onload = function(){
+            img.src = this.result
+        }
+        reader.readAsDataURL(selectedFile);
+    }
+    document.getElementById("earimage").addEventListener("change", updateEar);
+    document.getElementById("pimage").addEventListener("change", updateProfile);
+    
+</script>
+{%endblock%} 
+{%block footer%} 
+{{ super() }} 
 {%endblock%}
