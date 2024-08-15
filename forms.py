@@ -55,11 +55,32 @@ class RegForm(FlaskForm):
 
 
 class AuthForm(FlaskForm):
+
     earphoto = FileField(
         label="Ear Image",
         validators=[
             FileAllowed(photos,'Only images are allowed'),
             FileRequired('Ear Image Field should not be empty')
+        ]
+    )
+
+    databasetype = RadioField('database', choices = [(0,'Combined Database'), (1,'Distributed Database')], default=0)
+
+    submit = SubmitField('Submit')
+
+class MultimodeForm(FlaskForm):
+
+    earphoto = FileField(
+        label="Ear Image",
+        validators=[
+            FileAllowed(photos,'Only images are allowed'),
+        ]
+    )
+
+    photo = FileField(
+        label="Face Image",
+        validators=[
+            FileAllowed(photos,'Only images are allowed'),
         ]
     )
 

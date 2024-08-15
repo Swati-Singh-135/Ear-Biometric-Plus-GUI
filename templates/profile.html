@@ -11,7 +11,7 @@
 
 
 {%block content%}
-<div class="container">
+<div class="container" style="padding-top: 2rem;">
     <div class="row justify-content-center align-items-center">
         {% if profile %}
         <!-- <script>
@@ -32,6 +32,7 @@
                         />
                         <figcaption>Profile Picture</figcaption>
                     </figure>
+                    {% if images %}
                     <figure style="margin-left: 2rem;">
                         <img
                         src = {{ images[0] }}
@@ -61,7 +62,7 @@
                         />
                         <figcaption>Canny</figcaption>
                     </figure>
-                    
+                    {% endif %}
                 </div>
                 <div class="">
                     
@@ -81,9 +82,11 @@
                 <b>Time took:</b> {{ values[1] }} seconds <br>
                 <b>Time took:</b> {{ values[1]/4 }} seconds <br>
                 {% endif %}
+                {% if ear %}
                 <b>Feature Vector 1:</b> {{ ear['fv'][0]}} <br>
                 <b>Feature Vector 2:</b> {{ ear['fv'][1]}} <br>
                 <b>Shape:</b> {{ ear['shape']}} <br> <br>    
+                {% endif %}
                 <b>ID:</b>{{ profile['id']}} <br>
                 <b>Full Name: </b>{{ profile['name']}} <br>
                 <b>Father Name: </b>{{ profile['fatherName']}} <br>

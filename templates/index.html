@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+
+{%block title%}Home{%endblock%}
+
+
+
+{%block head%}
+{{ super() }}
+{%endblock%}
+
+
+{%block content%}
+
+<div class="container" style="text-align: center;">
+    <br>
+    <h1 class="md-5">Ear Based Biometric system</h1>
+    (Army Institute of Technology)
+    <br><br><br><br><br><br>
+    <h4><b>Try Now</b></h4>
+    <a href="/register" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Register</a>
+    <a href="/authenticate" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Authenticate</a>
+    <a href="/multimode" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Multimode</a>
+
+</div>
+<script>
+    document.getElementsByClassName("navbar")[0].style.display = "none";
+
+</script>
+{%endblock%}
+
+
+
+{%block footer%}
+{{ super() }}
+{%endblock%}
