@@ -14,21 +14,76 @@
 <div class="container">
     <div class="row justify-content-center align-items-center">
         {% if profile %}
-        <script>
+        <!-- <script>
             swal("Match Found", "", "success");
-        </script>
+        </script> -->
+        
         <div class="card text-black bg-light" style="width:100%;">
-            <div class="card-header"><h3><b>User Profile</b></h3></div>
+            <div class="card-header"><h3><b>{{ prompt }}</b></h3></div>
             <div class="card-body">
               <p class="card-text">
-                <div class="">
-                    <img
-                      src = {{ profile['profileImg'] }}
-                      class="img-thumbnail"
-                      id="pimageo"
-                      style="height: 200px; width: 200px; margin:5px;"
-                    />
+                <div class="" style="display: flex; height:20%">
+                    <figure>
+                        <img
+                        src = {{ profile['profileImg'] }}
+                        class="img-thumbnail"
+                        id="pimageo"
+                        style="height: 200px; width: 200px; margin:5px;"
+                        />
+                        <figcaption>Profile Picture</figcaption>
+                    </figure>
+                    <figure style="margin-left: 2rem;">
+                        <img
+                        src = {{ images[0] }}
+                        class="img-thumbnail"
+                        id="pimageo"
+                        style="height: 200px; width: 200px; margin:5px; -webkit-filter: grayscale(100%); filter: grayscale(100%);"
+                        />
+                        <figcaption>Original Ear</figcaption>
+                    </figure>
+                    <figure style="margin-left: 2rem; -webkit-filter: grayscale(100%); filter: grayscale(100%);">
+                        <img
+                        id="gauss" 
+                        src = {{ images[1] }}
+                        class="img-thumbnail"
+                        id="pimageo"
+                        style="height: 200px; width: 200px; margin:5px;"
+                        />
+                        <figcaption>Gaussian Blur</figcaption>
+                    </figure>
+                    <figure style="margin-left: 2rem;">
+                        <img
+                        id="canny" 
+                        src = {{ images[2] }}
+                        class="img-thumbnail"
+                        id="pimageo"
+                        style="height: 200px; width: 200px; margin:5px;"
+                        />
+                        <figcaption>Canny</figcaption>
+                    </figure>
+                    
                 </div>
+                <div class="">
+                    
+                </div>
+                <p class="card-text">
+                <!-- {{databasetype}} -->
+                {% if values[0] %}
+                <b>Accuracy:</b> {{ values[0] }} % <br>
+                {% endif %}
+                {% if databasetype=="0" %}
+                <b>Time took:</b> {{ values[1] }} seconds <br>
+                {% endif %}
+                {% if databasetype=="1"%}
+                <b>Time took:</b> {{ values[1]/4 }} seconds <br>
+                {% endif %}
+                {% if databasetype=="2"%}
+                <b>Time took:</b> {{ values[1] }} seconds <br>
+                <b>Time took:</b> {{ values[1]/4 }} seconds <br>
+                {% endif %}
+                <b>Feature Vector 1:</b> {{ ear['fv'][0]}} <br>
+                <b>Feature Vector 2:</b> {{ ear['fv'][1]}} <br>
+                <b>Shape:</b> {{ ear['shape']}} <br> <br>    
                 <b>ID:</b>{{ profile['id']}} <br>
                 <b>Full Name: </b>{{ profile['name']}} <br>
                 <b>Father Name: </b>{{ profile['fatherName']}} <br>
@@ -49,6 +104,10 @@
               </p>
             </div>
         </div>
+        <script>
+            document.getElementById('gauss').src = document.getElementById('gauss').src+'?'+(new Date()).getTime();
+            document.getElementById('canny').src = document.getElementById('canny').src+'?'+(new Date()).getTime();
+        </script>
         {% endif %}
         {% if not profile%}
         <script>

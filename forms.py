@@ -63,4 +63,6 @@ class AuthForm(FlaskForm):
         ]
     )
 
+    databasetype = RadioField('database', choices = [(0,'Combined Database'), (1,'Distributed Database')], default=0)
+
     submit = SubmitField('Submit')

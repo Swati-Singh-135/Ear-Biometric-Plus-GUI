@@ -1,16 +1,20 @@
 import os
 import pymongo
+import time
 from flask import Flask, render_template, send_from_directory, url_for
+import cv2
 from forms import RegForm, AuthForm
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 import sys
 sys.path.append('D:\\Project\\BE project\\BE Project Code\\Main\\projectMainDirectory')
-from quickRun import getFvAndShape
+from quickRun import getFvAndShape, getEarCannyAndGaussImg
+from facedetect import extractFace
 from earCompare import compareEar
 def findPerson(fv):
     for item in collection.find():
-        if compareEar(fv,item['fv'],a=0.1)>85:
-            return item
+        accuracy = compareEar(fv,item['fv'],a=0.1)
+        if accuracy>85:
+            return [accuracy, item]
     return None
 
 
@@ -31,12 +35,20 @@ def get_file(filename):
     return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'],filename)
 
 
+
+
 @app.route('/register', methods=['GET','POST'])
 def register():
     form = RegForm()
     if form.validate_on_submit():
         filename = photos.save(form.photo.data)
         profile_url = url_for('get_file',filename=filename)
+
+        img = cv2.imread('./'+profile_url)
+        print(img.shape)
+        face = extractFace(img,600)
+        cv2.imwrite('./'+profile_url,face)
+
         filename = photos.save(form.earphoto.data)
         ear_url = url_for('get_file',filename=filename)
         name = form.name.data
@@ -48,9 +60,15 @@ def register():
         print(type(dob))
         print(ear_url)
         try:
+            start = time.time()
             ear = getFvAndShape('./'+ear_url)
+            end = time.time()
+            timetook = round((end-start)/4,3)
+            info = getEarCannyAndGaussImg('./'+ear_url,600,9)
+            cv2.imwrite('uploads/canny.jpg',info['canny'])
+            cv2.imwrite('uploads/gauss.jpg',info['gaussian'])
             print(ear)
-            collection.insert_one({
+            profile = {
                 'name':name,
                 'id':regno,
                 'profileImg': profile_url,
@@ -59,8 +77,12 @@ def register():
                 'bloodGroup':bloodgroup,
                 'fv': ear['fv'],
                 'shape':ear['shape']
-            })
-            return render_template('registration.html',form=form, profile_url=profile_url, ear_url=ear_url,isRegister=True)
+            }
+            collection.insert_one(profile)
+            prompt = "Registration Successfull"
+            print(prompt)
+            # return render_template('registration.html',form=form, profile_url=profile_url, ear_url=ear_url,isRegister=True)
+            return render_template('profile.html', profile=profile, images=['uploads/'+filename,'uploads/gauss.jpg','uploads/canny.jpg'], ear=ear, prompt=prompt, values = [None,timetook], databasetype="0")
         except:
             print("Anonymous Ear Image")
             form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
@@ -75,14 +97,29 @@ def authenticate():
     form = AuthForm()
     if form.validate_on_submit():
         filename = photos.save(form.earphoto.data)
+        databasetype = form.databasetype.data
+        print(databasetype,type(databasetype))
         # print('upload/'+filename)
         
         try:
+            start = time.time()
             ear = getFvAndShape('uploads/'+filename)
-            print('1')
-            profile = findPerson(ear['fv'])
-            print('2')    
-            return render_template('profile.html', profile=profile)
+            end = time.time()
+            timetook = round((end-start)/4,3)
+            print("Time took:",end-start)
+            info = getEarCannyAndGaussImg('uploads/'+filename,600,9)
+            cv2.imwrite('uploads/canny.jpg',info['canny'])
+            cv2.imwrite('uploads/gauss.jpg',info['gaussian'])
+            # print(ear)
+            accuracy, profile = findPerson(ear['fv'])
+            print("accuracy: ",accuracy)
+            # print("profile", profile) 
+            prompt = ""
+            if(profile):
+                prompt = "Match Found"
+            else:
+                prompt = "Match Not Found"
+            return render_template('profile.html', profile=profile, images=['uploads/'+filename,'uploads/gauss.jpg','uploads/canny.jpg'], ear=ear, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)
         except:
             print("Anonymous Ear Image")
             form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
