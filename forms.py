@@ -53,7 +53,6 @@ class RegForm(FlaskForm):
     )
     submit = SubmitField('Submit')
 
-
 class AuthForm(FlaskForm):
 
     earphoto = FileField(

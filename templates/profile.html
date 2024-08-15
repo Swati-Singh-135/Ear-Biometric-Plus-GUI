@@ -14,9 +14,6 @@
 <div class="container" style="padding-top: 2rem;">
     <div class="row justify-content-center align-items-center">
         {% if profile %}
-        <!-- <script>
-            swal("Match Found", "", "success");
-        </script> -->
         
         <div class="card text-black bg-light" style="width:100%;">
             <div class="card-header"><h3><b>{{ prompt }}</b></h3></div>
@@ -68,7 +65,6 @@
                     
                 </div>
                 <p class="card-text">
-                <!-- {{databasetype}} -->
                 {% if values[0] %}
                 <b>Accuracy:</b> {{ values[0] }} % <br>
                 {% endif %}
@@ -93,17 +89,6 @@
                 <b>Date of Birth: </b>{{ profile['dob']}} <br>
                 <b>Blood Group:</b> {{ profile['bloodGroup']}} <br>
                 <br>
-                <!-- <b>Feature Vector 1: (angle between reference_Line_1 joining reference point and normal intersection point on the outer edge)</b>
-                <br>
-                {{profile['fv'][0]}}
-                <br>
-                <br>
-                <b>Feature Vector 2: (angle between reference_line_2 joining reference point and normal intersection point on the outer edge)</b>
-                <br>
-                {{profile['fv'][1]}}
-                <br>
-                <br>
-                <b>Ear Category:</b>{{profile['shape']+1}} -->
               </p>
             </div>
         </div>

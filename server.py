@@ -12,6 +12,7 @@ sys.path.append('D:\\Project\\BE project\\BE Project Code\\Main\\projectMainDire
 from quickRun import getFvAndShape, getEarCannyAndGaussImg
 from facedetect import extractFace
 from earCompare import compareEar
+
 def findPerson(fv):
     for item in collection.find():
         accuracy = compareEar(fv,item['fv'],a=0.1)
@@ -28,7 +29,6 @@ def findPersonByFace(encoding):
     return [None, None]
 
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'B3NzaC1ycDAQABAAABAQCkPsx7jEchCJDX'
 app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
@@ -43,7 +43,6 @@ collection = db['earCollection']
 @app.route('/uploads/<filename>')
 def get_file(filename):
     return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'],filename)
-
 
 @app.route('/')
 def home():
@@ -63,9 +62,10 @@ def register():
             cv2.imwrite('./'+profile_url,face)
             img = cv2.cvtColor(face,cv2.COLOR_BGR2RGB)
             encoding = face_recognition.face_encodings(img)[0]
-            print(encoding)
+            print("Encoding genrated successfully")
         except:
             error = True 
+            print("Encoding not generated. Face is not visible properly.")
             form.photo.errors.append("Face is not visible properly")
 
         filename = photos.save(form.earphoto.data)
@@ -87,7 +87,7 @@ def register():
             cv2.imwrite('static/images/ear.jpg',earimg)
             cv2.imwrite('static/images/canny.jpg',info['canny'])
             cv2.imwrite('static/images/gauss.jpg',info['gaussian'])
-            print(ear)
+            print("Feature vector generated successfully")
             if not error:
                 profile = {
                     'name':name,
@@ -103,13 +103,13 @@ def register():
             
                 collection.insert_one(profile)
                 prompt = "Registration Successfull"
+                print("Data inserted into mongoDB successfully")
                 print(prompt)
-                # return render_template('registration.html',form=form, profile_url=profile_url, ear_url=ear_url,isRegister=True)
                 return render_template('profile.html', profile=profile, images=['static/images/ear.jpg','static/images/gauss.jpg','static/images/canny.jpg'], ear=ear, prompt=prompt, values = [None,timetook], databasetype="0")
             else:
                 pass
         except:
-            print("Anonymous Ear Image")
+            print("Not able to scan ear properly")
             form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
     else:
         profile_url = None
@@ -123,9 +123,7 @@ def authenticate():
     if form.validate_on_submit():
         filename = photos.save(form.earphoto.data)
         databasetype = form.databasetype.data
-        print(databasetype,type(databasetype))
-        # print('upload/'+filename)
-        
+
         try:
             start = time.time()
             ear = getFvAndShape('uploads/'+filename)
@@ -133,7 +131,7 @@ def authenticate():
             timetook = round((end-start)/4,3)
             print("Time took:",end-start)
             info = getEarCannyAndGaussImg('uploads/'+filename,600,9)
-            
+            print("Feature vector generated successfully")
             earimg = cv2.imread('uploads/'+filename)
             cv2.imwrite('static/images/ear.jpg',earimg)
             cv2.imwrite('static/images/canny.jpg',info['canny'])
@@ -147,9 +145,11 @@ def authenticate():
                 prompt = "Match Found"
             else:
                 prompt = "Match Not Found"
+            print(prompt)
+
             return render_template('profile.html', profile=profile, images=['static/images/ear.jpg','static/images/gauss.jpg','static/images/canny.jpg'], ear=ear, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)
         except:
-            print("Anonymous Ear Image")
+            print("Not able to scan ear properly")
             form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
 
     return render_template('auth.html',form=form)
@@ -158,15 +158,12 @@ def authenticate():
 def multimode():
     form = MultimodeForm()
     if form.validate_on_submit():
-        # Time taken calculation
-        # accuracy
         databasetype = form.databasetype.data
         timetook = 0
         if form.earphoto.data:
+            print("Ear photo recieved")
             filename = photos.save(form.earphoto.data)
             databasetype = form.databasetype.data
-            print(databasetype,type(databasetype))
-            # print('upload/'+filename)
             
             try:
                 start = time.time()
@@ -175,24 +172,25 @@ def multimode():
                 timetook = round((end-start)/4,3)
                 print("Time took:",end-start)
                 info = getEarCannyAndGaussImg('uploads/'+filename,600,9)
+                print("Feature Vector generated successfully")
                 earimg = cv2.imread('uploads/'+filename)
                 cv2.imwrite('static/images/ear.jpg',earimg)
                 cv2.imwrite('static/images/canny.jpg',info['canny'])
                 cv2.imwrite('static/images/gauss.jpg',info['gaussian'])
                 os.remove('uploads/'+filename)
-                # print("-----------------------reached ------------------------")
-                # print(ear)
+                
                 accuracy, profile = findPerson(ear['fv'])
-                print("accuracy: ",accuracy)
-                # print("profile", profile) 
+                 
                 prompt = ""
                 if(profile):
-                    prompt = "Match Found"
+                    prompt = "Ear Matched"
                 else:
                     prompt = "Match Not Found"
+                print(prompt)
+
                 return render_template('profile.html', profile=profile, images=['static/images/ear.jpg','static/images/gauss.jpg','static/images/canny.jpg'], ear=ear, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)
             except:
-                print("Anonymous Ear Image")
+                print("Not able to scan ear properly")
                 form.earphoto.errors.append("Not able to scan ear properly. Try again with other image.")
 
         elif form.photo.data:
@@ -200,16 +198,20 @@ def multimode():
             filename = photos.save(form.photo.data)
             face = cv2.imread('uploads/'+filename)
             face = extractFace(face,600)
-            # cv2.imwrite('uploads/'+filename,face)
             os.remove('uploads/'+filename)
             face = cv2.cvtColor(face,cv2.COLOR_BGR2RGB)
             try:
                 encoding = face_recognition.face_encodings(face)[0]
+                print("Encoding generated successfully")
                 accuracy, profile = findPersonByFace(encoding)
                 if profile:
                     prompt = "Face Matched"
+                else:
+                    prompt = "Match Not Found"
+                print(prompt)
                 return render_template('profile.html', profile=profile, images=None, ear=None, prompt=prompt, values=[accuracy, timetook], databasetype=databasetype)         
             except:
+                print("Face is not visible properly")
                 form.photo.errors.append("Face is not visible properly")    
         else:
             form.earphoto.errors.append("Neither ear nor face image is uploaded")
@@ -221,5 +223,5 @@ def multimode():
 
 
 if __name__ == '__main__':
-    # collection.insert_one({'name':'prasant','marks':100})
+    
     app.run(port=3000, debug=True)
